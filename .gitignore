@@ -1,0 +1,9 @@
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/
+wp-content/object-cache.php
+wp-config.php
+.dockerenv
+.DS_Store
+Thumbs.db
+node_modules/

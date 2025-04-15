@@ -1,0 +1,91 @@
+
+services:
+
+  db:
+
+    image: mariadb:10.6
+
+    volumes:
+
+      - db_data:/var/lib/mysql
+
+    environment:
+
+      MYSQL_ROOT_PASSWORD: myrootpass
+
+      MYSQL_DATABASE: wordpress
+
+      MYSQL_USER: wordpress
+
+      MYSQL_PASSWORD: wordpress
+
+    networks:
+
+      - backend
+
+    # healthcheck:
+
+    #  test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+
+    #  timeout: 20s
+
+    #  interval: 5s
+
+    #  retries: 10
+
+
+
+  wordpress:
+
+    image: wordpress:latest
+
+    depends_on:
+
+      db:
+
+        condition: service_healthy
+
+    ports:
+
+      - "8000:80"
+
+    environment:
+
+      WORDPRESS_DB_HOST: db
+
+      WORDPRESS_DB_USER: wordpress
+
+      WORDPRESS_DB_PASSWORD: wordpress
+
+      WORDPRESS_DB_NAME: wordpress
+
+      APACHER_SERVER_NAME: localhost
+
+    networks:
+
+      - backend
+
+    volumes:
+
+      - wp_data:/var/www/html
+      - ./wp-cli.phar:/usr/local/bin/wp
+
+    hostname: wordpress
+ 
+
+
+volumes:
+
+  db_data:
+
+  wp_data:
+
+
+
+networks:
+
+  backend:
+
+    driver: bridge
+
+
